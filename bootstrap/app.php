@@ -13,7 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->group('api', [
+            \App\Http\Middleware\ApiJson::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function(AuthenticationException $ex){
+            return response()->json([
+                'status' => HTTP_UNA,
+                'message' => 'Login qilin'
+            ],401);
+        });
     })->create();
