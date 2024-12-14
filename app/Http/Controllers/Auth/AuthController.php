@@ -20,7 +20,7 @@ class AuthController extends Controller
              if (!Hash::check($request->password, $User->password)){
                 throw new AuthenticationException();
              }
-                auth()->login   ($User);
+                auth()->login($User);
 
                 return response()->json([
                     'token' => $User->createToken('core api')->plainTextToken
@@ -30,4 +30,7 @@ class AuthController extends Controller
             throw new ModelNotFoundException("paydalamiwshi tabilmadi");
         }
     }
+
+
+
 }

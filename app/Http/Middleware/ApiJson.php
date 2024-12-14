@@ -15,7 +15,12 @@ class ApiJson
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $accept = $request
+        $accept = $request->headers->get('Accept');
 
+        if ($accept === null || $accept === '*/*' || $accept === 'application/*') {
+            $request->headers->set('Accept', 'application/json');
+        }
+
+        return $next($request);
     }
 }

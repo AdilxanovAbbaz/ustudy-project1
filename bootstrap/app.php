@@ -1,9 +1,13 @@
+
 <?php
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,14 +18,35 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [
-            \App\Http\Middleware\ApiJson::class
+            \App\Http\Middleware\ApiJson::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function(AuthenticationException $ex){
+        $exceptions->render(function (AuthenticationException $ex) {
             return response()->json([
-                'status' => HTTP_UNA,
-                'message' => 'Login qilin'
-            ],401);
+                'status' => Response::HTTP_UNAUTHORIZED,
+                'message' => $ex->getMessage()
+            ], Response::HTTP_UNAUTHORIZED);
+        });
+
+        $exceptions->render(function (AuthorizationException $ex) {
+            return response()->json([
+                'status' => Response::HTTP_FORBIDDEN,
+                'message' => $ex->getMessage()
+            ], Response::HTTP_FORBIDDEN);
+        });
+
+        $exceptions->render(function (HttpException $ex) {
+            return response()->json([
+                'status' => $ex->getStatusCode(),
+                'message' => $ex->getMessage()
+            ], $ex->getStatusCode());
+        });
+
+        $exceptions->render(function (\Throwable $ex) {
+            return response()->json([
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $ex->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
