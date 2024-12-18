@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Traits;
 
-use App\Exceptions\ApiValidationException;
 use App\Exceptions\ApiValidationExeption;
 use Illuminate\Contracts\Validation\Validator;
 

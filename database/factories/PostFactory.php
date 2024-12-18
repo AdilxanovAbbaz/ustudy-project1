@@ -17,8 +17,13 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->jobTitle(),
-            'description' => fake() -> realText(255),
+            'title' => fake()->text(),
+            'description' => fake()->realText(255),
+            'view' => fake()->randomNumber(),
+            'shared' => fake()->randomNumber(),
+            'recommended' => fake()->boolean(),
+            'created_at' => fake()->dateTimeThisYear(),
+            'updated_at' => fake()->dateTimeThisYear(),
         ];
     }
 }
