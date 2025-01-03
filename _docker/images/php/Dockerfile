@@ -15,8 +15,7 @@ RUN apt-get update && apt-get install -y \
         jpegoptim optipng pngquant gifsicle \
         libonig-dev \
         libxml2-dev \
-        zip unzip \
-        git && \
+        zip unzip && \
         docker-php-ext-install pdo_mysql && \
         docker-php-ext-install bcmath && \
         docker-php-ext-install gd && \
@@ -36,5 +35,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/local/bin --filename=composer
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+USER www-data
 
 WORKDIR /var/www/backend

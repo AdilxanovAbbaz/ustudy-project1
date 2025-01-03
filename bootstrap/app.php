@@ -55,4 +55,3 @@ return Application::configure(basePath: dirname(__DIR__))
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
-    
